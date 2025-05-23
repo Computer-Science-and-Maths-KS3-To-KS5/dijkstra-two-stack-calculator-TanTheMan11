@@ -1,4 +1,4 @@
-// Stack, used to reverse node order in path() in Graph
+// Stack
 public class Stack
 {
     private final String[] stack; // Array of nodes
