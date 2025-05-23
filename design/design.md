@@ -1,5 +1,7 @@
 # Design
 
+My program will have a text-based interface where users can enter the expression to be evaluated.
+
 Here is the pseudocode for my program.
 
 `CLASS Main`  
