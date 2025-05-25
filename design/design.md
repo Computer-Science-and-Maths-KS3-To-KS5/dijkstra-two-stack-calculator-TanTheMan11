@@ -2,6 +2,10 @@
 
 My program will have a text-based interface where users can enter the expression to be evaluated.
 
+This flowchart depicts the main algorithm for my program.
+
+![Dijkstra Two Stack Calculator Flowchart](https://github.com/user-attachments/assets/963fdb6f-5be1-4ed3-8d33-69343e168a44)
+
 Here is the pseudocode for my program.
 
 `CLASS Main`  
