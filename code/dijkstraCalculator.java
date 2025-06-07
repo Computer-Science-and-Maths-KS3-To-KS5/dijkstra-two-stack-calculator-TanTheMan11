@@ -43,6 +43,22 @@ public class Main
         return isNumeric;
     }
 
+    // Checks if the expression contains a right bracket
+    public static boolean containsRightBracket(String[] expression)
+    {
+        boolean containsRightBracket = false;
+
+        for (String term : expression)
+        {
+            if (term.equals(")"))
+            {
+                containsRightBracket = true;
+                break;
+            }
+        }
+        return containsRightBracket;
+    }
+
     public static void main(String[] args)
     {
         Scanner in = new Scanner(System.in);
@@ -54,27 +70,38 @@ public class Main
         String[] terms = expression.split(" "); // Splits the string by spaces
         int expressionLength = terms.length; // The length of the expression
 
-        Stack operandStack = new Stack(expressionLength); // Creates an operand stack of maximum size expressionLength
-        Stack operatorStack = new Stack(expressionLength); // Creates an operator stack of maximum size expressionLength
-
-        for (String term : terms) // For each term in the expression
+        if (containsRightBracket(terms)) // If the expression contains a right bracket
         {
-            if (isNumeric(term)) // If the term is numeric, push the term to the operand stack
+            Stack operandStack = new Stack(expressionLength); // Creates an operand stack of maximum size expressionLength
+            Stack operatorStack = new Stack(expressionLength); // Creates an operator stack of maximum size expressionLength
+
+            for (String term : terms) // For each term in the expression
             {
-                operandStack.push(term);
+                if (isNumeric(term)) // If the term is numeric, push the term to the operand stack
+                {
+                    operandStack.push(term);
+                }
+                else if (term.equals("+") || term.equals("-") || term.equals("*") || term.equals("/")) // If the term is an operator, push the term to the operator stack
+                {
+                    operatorStack.push(term);
+                }
+                else if (term.equals(")")) // If the term is a closing bracket, execute the operation on the previous two operands
+                {
+                    double secondOperand = Double.parseDouble(operandStack.pop()); // Pops the topmost operand from the operand stack; this is the second operand due to the order of operation
+                    double firstOperand = Double.parseDouble(operandStack.pop()); // Pops the first operand from the operand stack
+                    String operation = operatorStack.pop(); // Pops the operator from the operator stack
+                    operandStack.push(String.valueOf(executeOperation(firstOperand, secondOperand, operation))); // Executes the operation on the two operands and pushes the result to the operand stack
+                }
+                else // The string is non-numeric, so throw an error
+                {
+                    throw new IllegalArgumentException();
+                }
             }
-            else if (term.equals("+") || term.equals("-") || term.equals("*") || term.equals("/")) // If the term is an operator, push the term to the operator stack
-            {
-                operatorStack.push(term);
-            }
-            else if (term.equals(")")) // If the term is a closing bracket, execute the operation on the previous two operands
-            {
-                double secondOperand = Double.parseDouble(operandStack.pop()); // Pops the topmost operand from the operand stack; this is the second operand due to the order of operation
-                double firstOperand = Double.parseDouble(operandStack.pop()); // Pops the first operand from the operand stack
-                String operation = operatorStack.pop(); // Pops the operator from the operator stack
-                operandStack.push(String.valueOf(executeOperation(firstOperand, secondOperand, operation))); // Executes the operation on the two operands and pushes the result to the operand stack
-            }
+            System.out.println(operandStack.pop()); // Prints the evaluated term
         }
-        System.out.println(operandStack.pop()); // Prints the evaluated term
+        else // The expression cannot be evaluated, so throw an error
+        {
+            throw new IllegalArgumentException();
+        }
     }
 }
